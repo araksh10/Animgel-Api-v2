@@ -25,7 +25,10 @@ const Mutation = new GraphQLObjectType({
                 genres: {type: new GraphQLList(GraphQLID)},
                 studio: {type: GraphQLID},
             },
-            resolve(parent, args) {
+            resolve(parent, args, context) {
+                if (!context.user) {
+                    throw new Error("Unauthorized");
+                }
                 const anime = new AnimeCard({
                     ...args,
                 });
@@ -37,7 +40,10 @@ const Mutation = new GraphQLObjectType({
             args: {
                 name: {type: new GraphQLNonNull(GraphQLString)},
             },
-            resolve(parent, args) {
+            resolve(parent, args, context) {
+                if (!context.user) {
+                    throw new Error("Unauthorized");
+                }
                 const genre = new Genre({name: args.name});
                 return genre.save();
             },
@@ -49,7 +55,10 @@ const Mutation = new GraphQLObjectType({
                 logo: {type: GraphQLString},
                 details: {type: GraphQLString},
             },
-            resolve(parent, args) {
+            resolve(parent, args, context) {
+                if (!context.user) {
+                    throw new Error("Unauthorized");
+                }
                 const studio = new Studio({...args});
                 return studio.save();
             },
@@ -59,7 +68,10 @@ const Mutation = new GraphQLObjectType({
         deleteAnime: {
             type: AnimeCardType,
             args: {id: {type: GraphQLID}},
-            resolve(parent, args) {
+            resolve(parent, args, context) {
+                if (!context.user) {
+                    throw new Error("Unauthorized");
+                }
                 return AnimeCard.findByIdAndDelete(args.id);
             },
         },
@@ -78,7 +90,10 @@ const Mutation = new GraphQLObjectType({
                 genres: {type: new GraphQLList(GraphQLID)},
                 studio: {type: GraphQLID}, 
             },
-            async resolve(parent, args) {
+            async resolve(parent, args, context) {
+                if (!context.user) {
+                    throw new Error("Unauthorized");
+                }
                 const updateData = {...args};
                 Object.keys(updateData).forEach((key) => {
                     if(updateData[key] === undefined) delete updateData[key];
