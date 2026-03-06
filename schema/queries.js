@@ -10,7 +10,7 @@ const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString } = graphql;
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
-    fields: {
+    fields: () => ({
         animes: {
             type: new GraphQLList(AnimeCardType),
             resolve(parent, args) {
@@ -57,7 +57,7 @@ const RootQuery = new GraphQLObjectType({
                 return Studio.findById(args.id);
             },
         },
-     },
+     }),
 });
 
 module.exports = RootQuery;
